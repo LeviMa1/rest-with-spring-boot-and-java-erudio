@@ -1,11 +1,9 @@
-package br.com.erudio.data.dto;
-
-import org.springframework.hateoas.RepresentationModel;
+package br.com.erudio.integrationtests.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable {
+public class PersonDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
