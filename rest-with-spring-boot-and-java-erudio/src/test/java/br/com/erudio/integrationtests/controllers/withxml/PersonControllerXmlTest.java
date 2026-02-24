@@ -2,11 +2,11 @@ package br.com.erudio.integrationtests.controllers.withxml;
 
 import br.com.erudio.config.TestConfigs;
 import br.com.erudio.integrationtests.dto.PersonDTO;
+import br.com.erudio.integrationtests.dto.wrappers.json.WrapperPersonDTO;
+import br.com.erudio.integrationtests.dto.wrappers.xmlandyaml.PagedModelPerson;
 import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
@@ -133,20 +133,21 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
     @Test
     @Order(6)
     void findAllTest() throws JsonProcessingException {
-        var content = given(specification).accept(MediaType.APPLICATION_XML_VALUE)
+        var content = given(specification).accept(MediaType.APPLICATION_XML_VALUE).queryParams("page", 3, "size", 12, "direction", "asc")
                 .when().get().then().statusCode(200).contentType(MediaType.APPLICATION_XML_VALUE).extract().body().asString();
 
-        List<PersonDTO> people = xmlMapper.readValue(content, new TypeReference<List<PersonDTO>>() {});
+        PagedModelPerson wrapper = xmlMapper.readValue(content, PagedModelPerson.class);
+        List<PersonDTO> people = wrapper.getContent();
 
         PersonDTO personOne = people.get(0);
 
         assertNotNull(personOne.getId());
         assertTrue(personOne.getId() > 0);
 
-        assertEquals("Ayrton", personOne.getFirstName());
-        assertEquals("Senna", personOne.getLastName());
-        assertEquals("São Paulo - Brasil", personOne.getAddress());
-        assertEquals("Male", personOne.getGender());
+        assertEquals("Amber", personOne.getFirstName());
+        assertEquals("Pearmine", personOne.getLastName());
+        assertEquals("Apt 1546", personOne.getAddress());
+        assertEquals("Female", personOne.getGender());
         assertTrue(personOne.isEnabled());
 
         PersonDTO personFour = people.get(4);
@@ -154,10 +155,44 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
         assertNotNull(personFour.getId());
         assertTrue(personFour.getId() > 0);
 
-        assertEquals("Nikola", personFour.getFirstName());
-        assertEquals("Tesla", personFour.getLastName());
-        assertEquals("Smiljan - Croatia", personFour.getAddress());
-        assertEquals("Male", personFour.getGender());
+        assertEquals("Amil", personFour.getFirstName());
+        assertEquals("Loffill", personFour.getLastName());
+        assertEquals("PO Box 69333", personFour.getAddress());
+        assertEquals("Female", personFour.getGender());
+        assertFalse(personFour.isEnabled());
+    }
+
+    @Test
+    @Order(7)
+    void findByNameTest() throws JsonProcessingException {
+        //{{baseUrl}}/api/person/v1/findPeopleByName/and?page=0&size=12&direction=asc
+        var content = given(specification).accept(MediaType.APPLICATION_XML_VALUE).pathParam("firstName","and")
+                .queryParams("page", 0, "size", 12, "direction", "asc")
+                .when().get("findPeopleByName/{firstName}").then().statusCode(200).contentType(MediaType.APPLICATION_XML_VALUE).extract().body().asString();
+
+        PagedModelPerson wrapper = xmlMapper.readValue(content, PagedModelPerson.class);
+        List<PersonDTO> people = wrapper.getContent();
+
+        PersonDTO personOne = people.get(0);
+
+        assertNotNull(personOne.getId());
+        assertTrue(personOne.getId() > 0);
+
+        assertEquals("Alessandra", personOne.getFirstName());
+        assertEquals("Itzkin", personOne.getLastName());
+        assertEquals("Room 899", personOne.getAddress());
+        assertEquals("Female", personOne.getGender());
+        assertTrue(personOne.isEnabled());
+
+        PersonDTO personFour = people.get(4);
+
+        assertNotNull(personFour.getId());
+        assertTrue(personFour.getId() > 0);
+
+        assertEquals("Andeee", personFour.getFirstName());
+        assertEquals("Follos", personFour.getLastName());
+        assertEquals("Suite 28", personFour.getAddress());
+        assertEquals("Female", personFour.getGender());
         assertTrue(personFour.isEnabled());
     }
 
