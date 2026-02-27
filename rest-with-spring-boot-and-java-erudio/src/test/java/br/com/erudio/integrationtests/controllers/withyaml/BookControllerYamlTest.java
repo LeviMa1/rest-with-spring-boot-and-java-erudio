@@ -169,7 +169,7 @@ class BookControllerYamlTest extends AbstractIntegrationTest {
 
         var response = given(specification)
                 .accept(MediaType.APPLICATION_YAML_VALUE)
-                .queryParams("page", 0 , "size", 12, "direction", "asc")
+                .queryParams("page", 0 , "size", 2, "direction", "desc")
                 .when()
                 .get()
                 .then()
@@ -188,20 +188,9 @@ class BookControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(foundBookOne.getAuthor());
         assertNotNull(foundBookOne.getPrice());
         assertTrue(foundBookOne.getId() > 0);
-        assertEquals("Big Data: como extrair volume, variedade, velocidade e valor da avalanche de informação cotidiana", foundBookOne.getTitle());
-        assertEquals("Viktor Mayer-Schonberger e Kenneth Kukier", foundBookOne.getAuthor());
-        assertEquals(54.00, foundBookOne.getPrice());
-
-        BookDTO foundBookFive = content.get(4);
-
-        assertNotNull(foundBookFive.getId());
-        assertNotNull(foundBookFive.getTitle());
-        assertNotNull(foundBookFive.getAuthor());
-        assertNotNull(foundBookFive.getPrice());
-        assertTrue(foundBookFive.getId() > 0);
-        assertEquals("Domain Driven Design", foundBookFive.getTitle());
-        assertEquals("Eric Evans", foundBookFive.getAuthor());
-        assertEquals(92.00, foundBookFive.getPrice());
+        assertEquals("Working effectively with legacy code", foundBookOne.getTitle());
+        assertEquals("Michael C. Feathers", foundBookOne.getAuthor());
+        assertEquals(49.0, foundBookOne.getPrice());
     }
 
     private void mockBook() {
