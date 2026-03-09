@@ -1,7 +1,6 @@
 package br.com.erudio.services;
 
 import br.com.erudio.config.FileStorageConfig;
-import br.com.erudio.controllers.FileController;
 import br.com.erudio.exception.FileNotFoundException;
 import br.com.erudio.exception.FileStorageException;
 import org.slf4j.Logger;
@@ -19,14 +18,14 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Service
-public class FileStorageServices {
+public class FileStorageService {
 
-    private static final Logger logger = LoggerFactory.getLogger(FileStorageServices.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
 
     private final Path fileStorageLocation;
 
     @Autowired
-    public FileStorageServices(FileStorageConfig fileStorageConfig) {
+    public FileStorageService(FileStorageConfig fileStorageConfig) {
         Path path = Paths.get(fileStorageConfig.getUploadDir()).toAbsolutePath().normalize();
 
         this.fileStorageLocation = path;

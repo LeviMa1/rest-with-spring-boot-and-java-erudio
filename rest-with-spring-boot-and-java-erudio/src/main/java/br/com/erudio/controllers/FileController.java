@@ -2,7 +2,7 @@ package br.com.erudio.controllers;
 
 import br.com.erudio.controllers.docs.FileControllerDocs;
 import br.com.erudio.data.dto.UploadFileResponseDTO;
-import br.com.erudio.services.FileStorageServices;
+import br.com.erudio.services.FileStorageService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class FileController implements FileControllerDocs {
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
-    private FileStorageServices service;
+    private FileStorageService service;
 
     @PostMapping("/uploadFile")
     @Override
