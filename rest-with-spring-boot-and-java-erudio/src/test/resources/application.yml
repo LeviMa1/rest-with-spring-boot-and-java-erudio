@@ -3,7 +3,7 @@ server:
 cors:
   originPatterns: http://localhost:8080,http://localhost:3000,https://onesys.com.br
 file:
-  upload-dir: /home/levi/Documentos/Code/UploadDir
+  upload-dir: /home/runner/work/rest-with-spring-boot-and-java-erudio/UploadDir
 security:
   jwt:
     token:
