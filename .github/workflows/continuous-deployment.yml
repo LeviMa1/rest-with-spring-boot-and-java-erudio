@@ -17,18 +17,19 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
-    - name: Setup Java 25
+    - name: Setup Java 21
       uses: actions/setup-java@v5
       with:
-        java-version: '25'
-        distribution: 'temurin'
+        java-version: '21'
+        distribution: 'adopt'
         cache: maven
 
     - name: Build Application .jar
-      working-directory: rest-with-spring-boot-and-java-erudio
+      working-directory: ./Projetos/rest-with-spring-boot-and-java-erudio
       run: mvn clean package
 
     - name: Docker Compose Build
+      working-directory: ./Projetos
       run: docker compose build
 
     - name: Push to Docker Hub Container Registry
